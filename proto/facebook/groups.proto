@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "facebook/comments.proto";
+
+package grain.facebook;
+
+message GroupsYouManage {
+  message Group {
+    repeated string groups = 1;
+  }
+  Group groups_you_manage = 1;
+}
+
+// Stored as a top-level array
+message GroupMembershipActivity {
+  message Data {
+    string name = 1;
+  }
+  message Attachment {
+    repeated Data data = 1;
+  }
+  message Group {
+    int64 timestamp = 1; // TODO: timestamp
+    string title = 2;
+    repeated Attachment attachments = 3;
+  }
+  repeated Group membership_activity = 1;
+}
+
+// Stored as a top-level array
+message GroupPostsComments {
+  repeated Post comments = 1;
+}

@@ -1,0 +1,24 @@
+syntax = "proto3";
+
+package grain.facebook;
+
+message Friend {
+  string name = 1;
+  int64 timestamp = 2; // TODO: timestamp
+}
+
+message FriendsAdded {
+  repeated Friend friends = 1;
+}
+
+message RejectedRequests {
+  repeated Friend rejected_requests = 1;
+}
+
+message RemovedFriends {
+  repeated Friend deleted_friends = 1;
+}
+
+message SentRequests {
+  repeated Friend sent_requests = 1;
+}

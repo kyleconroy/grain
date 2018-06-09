@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package grain.facebook;
+
+message AddressBook {
+  message Details {
+    string contact_point = 1;
+  }
+  message Contact {
+    string name = 1;
+    repeated Details details = 2;
+  }
+  message AddressBookEntry {
+    repeated Contact address_book = 1;
+  }
+  AddressBookEntry address_book = 1;
+}

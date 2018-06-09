@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+import "twitter/entity.proto";
+
+package grain.twitter;
+
+option go_package = "twitterpb";
+
+message Target {
+  string recipient_id = 1;
+}
+
+message DirectMessageData {
+  string text = 1;
+  Entities entities = 2;
+}
+
+message DirectMessageCreate {
+  Target target = 1;
+  string sender_id = 2;
+  string source_app_id = 3;
+  DirectMessageData message_data = 4;
+}
+
+message DirectMessageEvent {
+  string type = 1;
+  string id = 2;
+  string created_timestamp = 3;
+  DirectMessageCreate message_create = 4;
+}

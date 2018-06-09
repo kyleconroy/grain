@@ -1,0 +1,51 @@
+syntax = "proto3";
+
+import "twitter/entity.proto";
+import "twitter/user.proto";
+
+package grain.twitter;
+
+option go_package = "twitterpb";
+
+message Place {}
+
+message Coordinates {}
+
+message ExtendedTweet {}
+
+message Tweet {
+  reserved "id_str", "in_reply_to_status_id_str", "in_reply_to_user_id_str", "quoted_status_id_str";
+  repeated int64 contributors = 1;
+  Coordinates coordinates = 2;
+  string created_at = 3;
+  repeated int32 display_text_range = 4;
+  Entities entities = 5;
+  Entities extended_entities = 6;
+  ExtendedTweet extended_tweet = 7;
+  int32 favorite_count = 8;
+  bool favorited = 9;
+  string filter_level = 10;
+  string full_text = 11;
+  bool has_extended_profile = 12;
+  int64 id = 13;
+  string in_reply_to_screen_name = 14;
+  int64 in_reply_to_status_id = 15;
+  int64 in_reply_to_user_id = 16;
+  string lang = 17;
+  bool is_translation_enabled = 18;
+  Place place = 19;
+  int64 quoted_status_id = 20;
+  Tweet quoted_status = 21;
+  bool possibly_sensitive = 22;
+  bool possibly_sensitive_appealable = 23;
+  int32 retweet_count = 24;
+  bool retweeted = 25;
+  Tweet retweeted_status = 26;
+  string source = 27;
+  // map[string]interface{} scopes = 28;
+  string text = 29;
+  User user = 30;
+  bool withheld_copyright = 31;
+  repeated string withheld_in_countries = 32;
+  string withheld_scope = 33;
+}

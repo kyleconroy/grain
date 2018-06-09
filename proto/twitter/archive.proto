@@ -1,0 +1,19 @@
+syntax = "proto3";
+
+import "twitter/dm.proto";
+import "twitter/list.proto";
+import "twitter/tweet.proto";
+import "twitter/user.proto";
+
+package grain.twitter;
+
+option go_package = "twitterpb";
+
+message Archive {
+  repeated List lists = 1;
+  repeated User friends = 2;
+  repeated User followers = 3;
+  repeated Tweet timeline = 4;
+  repeated Tweet favorites = 5;
+  repeated DirectMessageEvent direct_messages = 6;
+}

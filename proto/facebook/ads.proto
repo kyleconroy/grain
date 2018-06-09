@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+package grain.facebook;
+
+message Ads {
+  message History {
+    string title = 1;
+    string action = 2;
+    int64 timestamp = 3; // TODO: timestamp
+  }
+  repeated string topics = 1;
+  repeated string custom_audiences = 2;
+  repeated string lead_gen_info = 3;
+  repeated History history = 4;
+}

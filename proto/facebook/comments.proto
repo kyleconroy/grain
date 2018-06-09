@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package grain.facebook;
+
+message Comment {
+  int64 timestamp = 1; // TODO: timestamp
+  string comment = 2;
+  string author = 3;
+  string group = 4;
+}
+
+message PhotoMetadata {
+  int64 iso_speed = 1;
+  int64 orientation = 2;
+  int64 original_width = 3;
+  int64 original_height = 4;
+  string upload_ip = 5;
+  string camera_make = 6;
+  string camera_model = 7;
+  int64 taken_timestamp = 8;
+  int64 modified_timestamp = 9;
+  string exposure = 10;
+  string focal_length = 11;
+  string f_stop = 12;
+}
+
+message MediaMetadata {
+  repeated PhotoMetadata photo_metadata = 1;
+}
+
+message Media {
+  string uri = 1;
+  string media_path = 2;
+  int64 creation_timestamp = 3;
+  MediaMetadata media_metadata = 4;
+  repeated Comment comments = 5;
+}
+
+message AttachmentData {
+  Media media = 1;
+}
+
+message Attachment {
+  repeated AttachmentData data = 1;
+}
+
+message Post {
+  message Data {
+    string post = 1;
+    Comment comment = 2;
+  }
+  int64 timestamp = 1; // TODO: timestamp
+  string title = 2;
+  repeated Data data = 3;
+  repeated Attachment attachments = 4;
+}
+
+// Stored as an array, not a top level message
+message YourPosts {
+  repeated Post posts = 1;
+}

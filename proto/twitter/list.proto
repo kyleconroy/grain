@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+import "twitter/user.proto";
+
+package grain.twitter;
+
+option go_package = "twitterpb";
+
+message List {
+  string slug = 1;
+  string name = 2;
+  string uri = 3;
+  string created_at = 4;
+  int64 id = 5;
+  int64 subscriber_count = 6;
+  int64 member_count = 7;
+  string mode = 8;
+  string full_name = 9;
+  string description = 10;
+  User user = 11;
+  bool following = 12;
+  repeated User members = 13;
+}

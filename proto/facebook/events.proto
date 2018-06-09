@@ -1,0 +1,35 @@
+syntax = "proto3";
+
+package grain.facebook;
+
+message Coordinate {
+  float longitude = 1;
+  float latitude = 2;
+}
+
+message Event {
+  message Place {
+    string name = 1;
+    Coordinate coordinate = 2;
+    string address = 3;
+  }
+  string name = 1;
+  int64 start_timestamp = 2; // TODO: timestamp
+  int64 end_timestamp = 3; // TODO: timestamp
+  string description = 4;
+}
+
+message EventInvitations {
+  repeated Event events_invited = 1;
+}
+
+message EventResponses {
+  message Joined {
+    repeated Event events_joined = 1;
+  }
+  Joined event_responses = 1;
+}
+
+message YourEvents {
+  repeated Event your_events = 1;
+}

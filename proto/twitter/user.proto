@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+import "twitter/entity.proto";
+
+package grain.twitter;
+
+option go_package = "twitterpb";
+
+message User {
+  reserved "id_str";
+  bool contributors_enabled = 1;
+  string created_at = 2;
+  bool default_profile = 3;
+  bool default_profile_image = 4;
+  string description = 5;
+  string email = 6;
+  Entities entities = 7;
+  int64 favourites_count = 8;
+  bool follow_request_sent = 9;
+  int64 followers_count = 10;
+  bool following = 11;
+  int64 friends_count = 12;
+  bool geo_enabled = 13;
+  bool has_extended_profile = 14;
+  int64 id = 15;
+  bool is_translator = 17;
+  bool is_translation_enabled = 18;
+  string lang = 19; // BCP-47 code of user defined language
+  int64 listed_count = 20;
+  string location = 21; // User defined location
+  string name = 22;
+  bool notifications = 23;
+  string profile_background_color = 24;
+  string profile_background_image_url = 25;
+  string profile_background_image_url_https = 26;
+  bool profile_background_tile = 27;
+  string profile_banner_url = 28;
+  string profile_image_url = 29;
+  string profile_image_url_https = 30;
+  string profile_link_color = 31;
+  string profile_sidebar_border_color = 32;
+  string profile_sidebar_fill_color = 33;
+  string profile_text_color = 34;
+  bool profile_use_background_image = 35;
+  bool protected = 37;
+  string screen_name = 38;
+  bool show_all_inline_media = 39;
+  // Tweet status = 40; // Only included if the user is a friend
+  int64 statuses_count = 41;
+  string time_zone = 42;
+  string url = 43;
+  int64 utc_offset = 44;
+  bool verified = 45;
+  repeated string withheld_in_countries = 46;
+  string withheld_scope = 47;
+}

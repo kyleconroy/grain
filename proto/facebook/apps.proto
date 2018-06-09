@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package grain.facebook;
+
+message InstalledApps {
+  message App {
+    string name = 1;
+    int64 time_added = 2; // TODO: timestamp
+  }
+  repeated App installed_apps = 1;
+}
+
+// Stored as an array, not a top level message
+message PostsFromApps {
+  message ExternalContext {
+    string name = 1;
+    string url = 2;
+  }
+  message Data {
+    ExternalContext external_context = 1;
+  }
+  message Attachment {
+    repeated Data data = 1;
+  }
+  message Post {
+    int64 timestamp = 1; // TODO: timestamp
+    repeated Attachment attachments = 2;
+  }
+  repeated Post posts = 1;
+}
+
+message YourApps {
+  message App {
+    string name = 1;
+    int64 time_added = 2; // TODO: timestamp
+  }
+  repeated App admined_apps = 1;
+}
