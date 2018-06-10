@@ -36,19 +36,40 @@ type Archiver struct {
 	httpClient        *http.Client
 }
 
-func NewArchiver(c *toml.Tree) *Archiver {
+func NewArchiver(c *toml.Tree) (*Archiver, error) {
 	// TODO: Use a well-known location for the cache
 	transport := httpcache.NewTransport(diskcache.New("httpcache"))
-	return &Archiver{
-		username:          c.Get("username").(string),
-		consumerKey:       c.Get("consumer-key").(string),
-		consumerSecret:    c.Get("consumer-secret").(string),
-		accessToken:       c.Get("access-token").(string),
-		accessTokenSecret: c.Get("access-token-secret").(string),
-		csvPath:           c.Get("tweet-csv").(string),
-		basePath:          filepath.Join("archive", "twitter"),
-		httpClient:        transport.Client(),
+
+	a := Archiver{
+		basePath:   filepath.Join("archive", "twitter"),
+		httpClient: transport.Client(),
 	}
+
+	var ok bool
+	pairs := []struct {
+		prop     *string
+		key      string
+		required bool
+	}{
+		{&a.username, "username", true},
+		{&a.consumerKey, "consumer-key", true},
+		{&a.consumerSecret, "consumer-secret", true},
+		{&a.accessToken, "access-token", true},
+		{&a.accessTokenSecret, "access-token-secret", true},
+		{&a.csvPath, "tweet-csv", false},
+	}
+
+	for _, pair := range pairs {
+		if pair.required && !c.Has(pair.key) {
+			return nil, fmt.Errorf("Missing `%s` key in [twitter] section", pair.key)
+		}
+		*pair.prop, ok = c.Get(pair.key).(string)
+		if !ok {
+			return nil, fmt.Errorf("Expected `%s` to be a string", pair.key)
+		}
+	}
+
+	return &a, nil
 }
 
 func marshal(pb proto.Message, path string) error {

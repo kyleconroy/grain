@@ -8,8 +8,8 @@ Grain looks for API access keys and secrets in `config.toml`.
 
 ## Twitter
 
-Download a full archive of your Twitter account. Unlike the official Twitter
-Archive, your Grain archive includes the following records:
+Grain will download a full archive of your Twitter account, unlike the official
+Twitter Archive. Your Grain archive includes the following records:
 
 - Direct messages
 - Favorites
@@ -23,11 +23,12 @@ The archive also includes all media associated with the above records.
 For privacy and performance reasons, you'll need to obtain your own API
 credentials.
 
-1. Log onto https://twitter.com with the account you'd like to archive
-2. Go to https://apps.twitter.com/ and create a new application
-3. Go to the "Keys and Access Tokens" section for your application
-4. Generate access tokens via "Create my access token"
-5. Fill in `config.toml` with the access and secret tokens
+1. Log onto [Twitter](https://twitter.com) with the account you'd like to archive
+2. Request your archive from your [Settings page](https://twitter.com/settings/account)
+3. Create a new [application](https://apps.twitter.com)
+4. Go to the "Keys and Access Tokens" section for your application
+5. Generate access tokens via "Create my access token"
+6. Fill in `config.toml` with the access and secret tokens
 
 ```
 [twitter]
