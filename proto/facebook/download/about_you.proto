@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package grain.facebook;
+package grain.facebook.download;
 
 message AddressBook {
   message Details {

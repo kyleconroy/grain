@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-import "facebook/comments.proto";
+import "facebook/download/comments.proto";
 
-package grain.facebook;
+package grain.facebook.download;
 
 message GroupsYouManage {
   message Group {

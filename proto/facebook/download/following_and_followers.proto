@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package grain.facebook;
+package grain.facebook.download;
 
 // Stored as an array, not a top level message
 message FollowedPages {

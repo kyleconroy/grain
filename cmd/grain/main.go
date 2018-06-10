@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/kyleconroy/grain/facebook"
 	"github.com/kyleconroy/grain/twitter"
 	toml "github.com/pelletier/go-toml"
 )
@@ -30,16 +31,15 @@ func run() error {
 	}
 
 	if config.Has("facebook") {
-		// config := config.Get("facebook").(*toml.Tree)
-		// a := facebook.NewArchiver(config, db, fs)
+		config, ok := config.Get("facebook").(*toml.Tree)
+		if !ok {
+			return fmt.Errorf("Config file should contain a [facebook] section")
+		}
 
-		// if err := a.Sync(context.TODO()); err != nil {
-		// return err
-		// }
-
-		// if err := a.Parse(context.TODO()); err != nil {
-		// return err
-		// }
+		a := facebook.NewArchiver(config)
+		if err := a.Sync(context.TODO()); err != nil {
+			return err
+		}
 	}
 
 	return nil
