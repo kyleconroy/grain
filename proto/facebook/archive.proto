@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+import "facebook/photo.proto";
+import "facebook/user.proto";
+
+package grain.facebook;
+
+option go_package = "facebookpb";
+
+message Archive {
+  User me = 1;
+  repeated Photo photos = 2;
+}

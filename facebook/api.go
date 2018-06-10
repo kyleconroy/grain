@@ -3,10 +3,14 @@ package facebook
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
 	"strings"
+
+	"github.com/golang/protobuf/proto"
+	"github.com/kyleconroy/grain/gen/facebook"
 )
 
 type Client struct {
@@ -38,13 +42,11 @@ type Metadata struct {
 type Node struct {
 	Metadata Metadata `json:"metadata"`
 	ID       string   `json:"id"`
+
+	Message proto.Message
 }
 
 type Option func(*url.Values)
-
-func Meta(form *url.Values) {
-	form.Set("metadata", "1")
-}
 
 func Fields(args ...string) func(form *url.Values) {
 	return func(form *url.Values) {
@@ -55,6 +57,7 @@ func Fields(args ...string) func(form *url.Values) {
 func (c *Client) GetNode(id string, options ...Option) (*Node, error) {
 	form := url.Values{}
 	form.Set("access_token", c.accessToken)
+	form.Set("metadata", "1")
 	form.Set("method", "GET")
 	for _, opt := range options {
 		opt(&form)
@@ -72,10 +75,25 @@ func (c *Client) GetNode(id string, options ...Option) (*Node, error) {
 	}
 	defer resp.Body.Close()
 	var n Node
-	dec := json.NewDecoder(resp.Body)
-	if err := dec.Decode(&n); err != nil {
+	blob, err := ioutil.ReadAll(resp.Body)
+	if err := json.Unmarshal(blob, &n); err != nil {
 		return nil, err
 	}
+
+	// fmt.Println(string(blob))
+	var m proto.Message
+	switch n.Metadata.Type {
+	case "user":
+		m = &facebookpb.User{}
+	case "photo":
+		m = &facebookpb.Photo{}
+	}
+
+	if err := json.Unmarshal(blob, &m); err != nil {
+		return nil, err
+	}
+
+	n.Message = m
 	return &n, nil
 }
 
@@ -99,7 +117,7 @@ func (c *Client) GetEdge(id, connection string, paging *Paging, options ...Optio
 	}
 
 	u := c.baseURL + id + "/" + connection
-	if paging.Next != "" {
+	if paging != nil && paging.Next != "" {
 		u = paging.Next
 	}
 

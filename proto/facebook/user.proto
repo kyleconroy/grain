@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package grain.facebook;
+
+option go_package = "facebookpb";
+
+message User {
+  string id = 1;
+  string birthday = 2;
+}

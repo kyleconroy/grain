@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package grain.facebook;
+
+option go_package = "facebookpb";
+
+message Album {
+  string id = 1;
+}
+
+message Owner {
+  string name = 1;
+  string id = 2;
+}
+
+message Image {
+  int32 height = 1;
+  int32 width = 2;
+  string source = 3;
+}
+
+message Photo {
+  string id = 1;
+  Album album = 2;
+  // backdated_time = 3;
+  // backdated_time_granularity = 4;
+  bool can_backdate = 5;
+  bool can_delete = 6;
+  bool can_tag = 7;
+  string created_time = 8;
+  Owner from = 10;
+  int32 height = 11;
+  int32 width = 12;
+  string icon = 13;
+  repeated Image images = 14;
+  //     "link",
+  //     "name",
+  //     "name_tags",
+  //     "page_story_id",
+  //     "picture",
+  //     "place",
+  //     "target",
+  //     "updated_time",
+  //     "webp_images",
+}
