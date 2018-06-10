@@ -8,6 +8,8 @@ import (
 	"path/filepath"
 	"sort"
 
+	"github.com/gregjones/httpcache"
+	"github.com/gregjones/httpcache/diskcache"
 	"github.com/kyleconroy/grain/archive"
 	"github.com/kyleconroy/grain/gen/facebook"
 	toml "github.com/pelletier/go-toml"
@@ -23,6 +25,7 @@ type Archiver struct {
 	id          string
 
 	count    int
+	seen     map[string]struct{}
 	api      *Client
 	archive  *facebookpb.Archive
 	metadata map[string]fieldschema
@@ -36,12 +39,17 @@ func NewArchiver(c *toml.Tree) *Archiver {
 		}
 	}
 
+	transport := httpcache.NewTransport(diskcache.New("httpcache"))
+	fapi := NewClient(c.Get("access-token").(string))
+	fapi.HttpClient = transport.Client()
+
 	return &Archiver{
 		accessToken: c.Get("access-token").(string),
 		id:          c.Get("id").(string),
-		api:         NewClient(c.Get("access-token").(string)),
 		archive:     &facebookpb.Archive{},
 		metadata:    fields,
+		api:         fapi,
+		seen:        map[string]struct{}{},
 	}
 }
 
@@ -113,6 +121,11 @@ func (a *Archiver) save() error {
 }
 
 func (a *Archiver) archiveNode(ctx context.Context, id string) error {
+	// Don't process a node twice
+	if _, ok := a.seen[id]; ok {
+		return nil
+	}
+
 	// Fetch the node
 	kind, err := a.buildMetadata(ctx, id)
 	if err != nil {
@@ -125,6 +138,8 @@ func (a *Archiver) archiveNode(ctx context.Context, id string) error {
 	if err != nil {
 		return err
 	}
+
+	a.seen[id] = struct{}{}
 
 	switch v := node.Message.(type) {
 	case *facebookpb.Photo:
@@ -148,8 +163,6 @@ func (a *Archiver) archiveNode(ctx context.Context, id string) error {
 			return err
 		}
 	}
-
-	// fmt.Println(a.metadata[kind].Conns)
 
 	// Archive connections
 	for _, connection := range a.metadata[kind].Conns {
@@ -189,5 +202,8 @@ func (a *Archiver) archiveConnection(ctx context.Context, id, connection string)
 }
 
 func (a *Archiver) Sync(ctx context.Context) error {
-	return a.archiveNode(ctx, a.id)
+	err := a.archiveNode(ctx, a.id)
+	// best effort to save
+	a.save()
+	return err
 }

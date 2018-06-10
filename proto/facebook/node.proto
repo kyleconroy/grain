@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package grain.facebook;
+
+option go_package = "facebookpb";
+
+message Node {
+  string id = 1;
+}

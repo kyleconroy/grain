@@ -4,13 +4,71 @@ package grain.facebook;
 
 option go_package = "facebookpb";
 
-message Album {
-  string id = 1;
-}
-
 message Owner {
   string name = 1;
   string id = 2;
+}
+
+message Location {
+  string city = 1;
+  string country = 2;
+  float latitude = 3;
+  float longitude = 4;
+}
+
+message Place {
+  string id = 1;
+  // The name of the Page
+  string name = 2;
+  // The location of this place. Applicable to all Places
+  Location location = 3;
+}
+
+message Album {
+  string id = 1;
+  // A user-specified time for when this object was created
+  string backdated_time = 2;
+  // How accurate the backdated time is
+  string backdated_time_granularity = 3;
+  // Whether the viewer can backdate this album
+  bool can_backdate = 4;
+  // Whether the viewer can upload photos to this album
+  bool can_upload = 5;
+  // The approximate number of photos in the album. This is not necessarily an exact count
+  uint32 count = 6;
+  uint32 photo_count = 18;
+  // Album cover photo id
+  Photo cover_photo = 7;
+  // The time the album was initially created
+  string created_time = 8;
+  // The description of the album
+  string description = 9;
+  // The URL for editing this album
+  string edit_link = 10;
+  // If this object has a place, the event associated with the place
+  // string event = 11;
+  // The profile that created the album
+  Owner from = 12;
+  // Determines whether or not the album should be shown to users
+  bool is_user_facing = 13;
+  // A link to this album on Facebook
+  string link = 14;
+  // The textual location of the album"
+  string location = 15;
+  // Time of the last major update (e.g. addition of photos) expressed as UNIX time
+  string modified_major = 16;
+  // The title of the album
+  string name = 17;
+  // The place associated with this album
+  Place place = 19;
+  // The privacy settings for the album
+  string privacy = 20;
+  // The type of the album: profile, mobile, wall, normal or album
+  string type = 21;
+  // The last time the album was updated
+  string updated_time = 22;
+  // The approximate number of videos in the album. This is not necessarily an exact count
+  uint32 video_count = 23;
 }
 
 message Image {
@@ -22,8 +80,10 @@ message Image {
 message Photo {
   string id = 1;
   Album album = 2;
-  // backdated_time = 3;
-  // backdated_time_granularity = 4;
+  // A user-specified time for when this object was created
+  string backdated_time = 3;
+  // How accurate the backdated time is
+  string backdated_time_granularity = 4;
   bool can_backdate = 5;
   bool can_delete = 6;
   bool can_tag = 7;
@@ -33,8 +93,8 @@ message Photo {
   int32 width = 12;
   string icon = 13;
   repeated Image images = 14;
+  string name = 15;
   //     "link",
-  //     "name",
   //     "name_tags",
   //     "page_story_id",
   //     "picture",

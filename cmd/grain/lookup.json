@@ -1,4 +1,38 @@
 {
+  "album": {
+    "fields": [
+      "id",
+      "backdated_time",
+      "backdated_time_granularity",
+      "can_backdate",
+      "can_upload",
+      "count",
+      "cover_photo",
+      "created_time",
+      "description",
+      "edit_link",
+      "event",
+      "from",
+      "is_user_facing",
+      "link",
+      "location",
+      "modified_major",
+      "name",
+      "photo_count",
+      "place",
+      "privacy",
+      "type",
+      "updated_time",
+      "video_count"
+    ],
+    "connections": [
+      "reactions",
+      "sharedposts",
+      "comments",
+      "likes",
+      "photos"
+    ]
+  },
   "photo": {
     "fields": [
       "id",

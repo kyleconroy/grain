@@ -6,13 +6,17 @@ Package facebookpb is a generated protocol buffer package.
 
 It is generated from these files:
 	facebook/archive.proto
+	facebook/node.proto
 	facebook/photo.proto
 	facebook/user.proto
 
 It has these top-level messages:
 	Archive
-	Album
+	Node
 	Owner
+	Location
+	Place
+	Album
 	Image
 	Photo
 	User

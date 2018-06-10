@@ -14,7 +14,7 @@ import (
 )
 
 type Client struct {
-	httpClient  *http.Client
+	HttpClient  *http.Client
 	baseURL     string
 	accessToken string
 }
@@ -22,7 +22,7 @@ type Client struct {
 func NewClient(token string) *Client {
 	return &Client{
 		accessToken: token,
-		httpClient:  http.DefaultClient,
+		HttpClient:  http.DefaultClient,
 		baseURL:     "https://graph.facebook.com/v3.0/",
 	}
 }
@@ -64,7 +64,7 @@ func (c *Client) GetNode(id string, options ...Option) (*Node, error) {
 	}
 
 	req, _ := http.NewRequest("POST", c.baseURL+id, strings.NewReader(form.Encode()))
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.HttpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
@@ -83,10 +83,14 @@ func (c *Client) GetNode(id string, options ...Option) (*Node, error) {
 	// fmt.Println(string(blob))
 	var m proto.Message
 	switch n.Metadata.Type {
-	case "user":
-		m = &facebookpb.User{}
+	case "album":
+		m = &facebookpb.Album{}
 	case "photo":
 		m = &facebookpb.Photo{}
+	case "user":
+		m = &facebookpb.User{}
+	default:
+		m = &facebookpb.Node{}
 	}
 
 	if err := json.Unmarshal(blob, &m); err != nil {
@@ -122,7 +126,7 @@ func (c *Client) GetEdge(id, connection string, paging *Paging, options ...Optio
 	}
 
 	req, _ := http.NewRequest("POST", u, strings.NewReader(form.Encode()))
-	resp, err := c.httpClient.Do(req)
+	resp, err := c.HttpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
