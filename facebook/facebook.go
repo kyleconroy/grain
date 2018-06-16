@@ -22,7 +22,6 @@ type fieldschema struct {
 
 type Archiver struct {
 	accessToken string
-	id          string
 
 	count    int
 	seen     map[string]struct{}
@@ -45,7 +44,6 @@ func NewArchiver(c *toml.Tree) *Archiver {
 
 	return &Archiver{
 		accessToken: c.Get("access-token").(string),
-		id:          c.Get("id").(string),
 		archive:     &facebookpb.Archive{},
 		metadata:    fields,
 		api:         fapi,
@@ -117,6 +115,26 @@ func (a *Archiver) save() error {
 			return err
 		}
 	}
+	{
+		path := filepath.Join("archive", "facebook", "albums.json")
+		b, err := json.MarshalIndent(facebookpb.Archive{Albums: a.archive.Albums}, "", "  ")
+		if err != nil {
+			return err
+		}
+		if err := ioutil.WriteFile(path, b, 0644); err != nil {
+			return err
+		}
+	}
+	{
+		path := filepath.Join("archive", "facebook", "friends.json")
+		b, err := json.MarshalIndent(facebookpb.Archive{Friends: a.archive.Friends}, "", "  ")
+		if err != nil {
+			return err
+		}
+		if err := ioutil.WriteFile(path, b, 0644); err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
@@ -150,10 +168,13 @@ func (a *Archiver) archiveNode(ctx context.Context, id string) error {
 		if err := archive.ArchiveURL(ctx, "facebook", "media", v.Images[0].Source); err != nil {
 			return err
 		}
+	case *facebookpb.Album:
+		a.archive.Albums = append(a.archive.Albums, v)
 	case *facebookpb.User:
-		if v.Id == a.id {
+		if id == "me" {
 			a.archive.Me = v
 		} else {
+			a.archive.Friends = append(a.archive.Friends, v)
 		}
 	}
 
@@ -166,7 +187,7 @@ func (a *Archiver) archiveNode(ctx context.Context, id string) error {
 
 	// Archive connections
 	for _, connection := range a.metadata[kind].Conns {
-		if connection == "albums" || connection == "photos" {
+		if a.CanFollow(id, kind, connection) {
 			if err := a.archiveConnection(ctx, id, connection); err != nil {
 				return err
 			}
@@ -174,6 +195,18 @@ func (a *Archiver) archiveNode(ctx context.Context, id string) error {
 	}
 
 	return nil
+}
+
+func (a *Archiver) CanFollow(id, kind, connection string) bool {
+	if id == "me" {
+		return connection == "photos" || connection == "albums"
+	}
+	switch kind {
+	case "album":
+		return connection == "photos"
+	default:
+		return false
+	}
 }
 
 func (a *Archiver) archiveConnection(ctx context.Context, id, connection string) error {
@@ -188,6 +221,7 @@ func (a *Archiver) archiveConnection(ctx context.Context, id, connection string)
 		}
 
 		for _, node := range data.Data {
+			// TODO: Pass kind to archiveNode so we don't have to make two requests
 			if err := a.archiveNode(ctx, node.ID); err != nil {
 				return err
 			}
@@ -202,7 +236,7 @@ func (a *Archiver) archiveConnection(ctx context.Context, id, connection string)
 }
 
 func (a *Archiver) Sync(ctx context.Context) error {
-	err := a.archiveNode(ctx, a.id)
+	err := a.archiveNode(ctx, "me")
 	// best effort to save
 	a.save()
 	return err

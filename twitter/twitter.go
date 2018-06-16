@@ -25,6 +25,15 @@ import (
 	toml "github.com/pelletier/go-toml"
 )
 
+const (
+	FilenameDirectMessages = "dms.json"
+	FilenameFavorites      = "favorites.json"
+	FilenameFollowers      = "followers.json"
+	FilenameFriends        = "friends.json"
+	FilenameLists          = "lists.json"
+	FilenameTimeline       = "tweets.json"
+)
+
 type Archiver struct {
 	username          string
 	consumerKey       string
@@ -33,7 +42,8 @@ type Archiver struct {
 	accessTokenSecret string
 	csvPath           string
 	basePath          string
-	httpClient        *http.Client
+
+	httpClient *http.Client
 }
 
 func NewArchiver(c *toml.Tree) (*Archiver, error) {
@@ -72,16 +82,35 @@ func NewArchiver(c *toml.Tree) (*Archiver, error) {
 	return &a, nil
 }
 
-func marshal(pb proto.Message, path string) error {
-	m := jsonpb.Marshaler{Indent: "  ", OrigName: true}
-	f, err := os.Create(path)
-	if err != nil {
-		return err
+func LoadArchive(base string) (*twitterpb.Archive, error) {
+	m := jsonpb.Unmarshaler{}
+	a := twitterpb.Archive{}
+	paths := []string{
+		FilenameDirectMessages,
+		FilenameFavorites,
+		FilenameFollowers,
+		FilenameFriends,
+		FilenameLists,
+		FilenameTimeline,
 	}
-	return m.Marshal(f, pb)
+
+	for _, filename := range paths {
+		path := filepath.Join(base, filename)
+		if _, err := os.Stat(path); os.IsNotExist(err) {
+			continue
+		}
+		r, err := os.Open(path)
+		if err != nil {
+			return nil, err
+		}
+		if err := m.Unmarshal(r, &a); err != nil {
+			return nil, err
+		}
+	}
+	return &a, nil
 }
 
-func ReadN(c *Reader, n int, lookup map[int64]struct{}) ([]CSVTweet, error) {
+func readN(c *Reader, n int, lookup map[int64]struct{}) ([]CSVTweet, error) {
 	ids := []CSVTweet{}
 	for len(ids) < n {
 		tweet, err := c.Read()
@@ -98,7 +127,22 @@ func ReadN(c *Reader, n int, lookup map[int64]struct{}) ([]CSVTweet, error) {
 	return ids, nil
 }
 
+func marshal(pb proto.Message, path string) error {
+	m := jsonpb.Marshaler{Indent: "  ", OrigName: true}
+	f, err := os.Create(path)
+	if err != nil {
+		return err
+	}
+	return m.Marshal(f, pb)
+}
+
 func (a *Archiver) Sync(ctx context.Context) error {
+	fmt.Println("Loading archive…")
+	arc, err := LoadArchive(a.basePath)
+	if err != nil {
+		return err
+	}
+
 	api := NewTwitterApi(a.accessToken, a.accessTokenSecret, a.consumerKey, a.consumerSecret)
 	api.HttpClient = a.httpClient
 	api.SetDelay(10 * time.Second)
@@ -107,93 +151,90 @@ func (a *Archiver) Sync(ctx context.Context) error {
 		return err
 	}
 
-	listPath := filepath.Join(a.basePath, "lists.json")
-	tweetPath := filepath.Join(a.basePath, "tweets.json")
-	friendPath := filepath.Join(a.basePath, "friends.json")
-	followerPath := filepath.Join(a.basePath, "followers.json")
-	favoritePath := filepath.Join(a.basePath, "favorites.json")
-	dmPath := filepath.Join(a.basePath, "dms.json")
+	dmPath := filepath.Join(a.basePath, FilenameDirectMessages)
+	favoritePath := filepath.Join(a.basePath, FilenameFavorites)
+	followerPath := filepath.Join(a.basePath, FilenameFollowers)
+	friendPath := filepath.Join(a.basePath, FilenameFriends)
+	listPath := filepath.Join(a.basePath, FilenameLists)
+	timelinePath := filepath.Join(a.basePath, FilenameTimeline)
 
+	fmt.Println("Starting sync…")
 	g, ctx := errgroup.WithContext(ctx)
+	g.Go(func() error {
+		tweets, err := a.tweets(ctx, api, arc)
+		if err != nil {
+			return err
+		}
 
-	if _, err := os.Stat(tweetPath); os.IsNotExist(err) {
-		g.Go(func() error {
-			tweets, err := a.tweets(ctx, api)
+		if err := marshal(&twitterpb.Archive{Timeline: tweets}, timelinePath); err != nil {
+			return err
+		}
+
+		if a.csvPath != "" {
+			h, err := os.Open(a.csvPath)
 			if err != nil {
 				return err
 			}
 
-			if err := marshal(&twitterpb.Archive{Timeline: tweets}, tweetPath); err != nil {
+			// Build out a lookup table of existing tweets
+			lookup := map[int64]struct{}{}
+			for _, t := range tweets {
+				lookup[t.Id] = struct{}{}
+			}
+
+			// Load the Tweet archive
+			reader := NewCSVReader(h)
+
+			for {
+				// For each tweet, see if we have it
+				subset, err := readN(reader, 100, lookup)
+				if err != nil {
+					return err
+				}
+
+				if len(subset) == 0 {
+					break
+				}
+
+				ids := []string{}
+				for _, t := range subset {
+					ids = append(ids, strconv.Itoa(int(t.TweetID)))
+				}
+
+				params := url.Values{}
+				params.Set("include_entities", "true")
+				params.Set("id", strings.Join(ids, ","))
+				statuses, err := api.LookupStatuses(params)
+				if err != nil {
+					return err
+				}
+
+				fmt.Printf("Processed %d tweets…\n", len(statuses))
+				for _, s := range statuses {
+					tweets = append(tweets, s)
+				}
+			}
+
+			if err := marshal(&twitterpb.Archive{Timeline: tweets}, timelinePath); err != nil {
+				return err
+			}
+		}
+
+		for _, tweet := range tweets {
+			if err := a.archiveTweet(ctx, tweet); err != nil {
 				return err
 			}
 
-			if a.csvPath != "" {
-				h, err := os.Open(a.csvPath)
-				if err != nil {
-					return nil
-				}
-
-				// Build out a lookup table of existing tweets
-				lookup := map[int64]struct{}{}
-				for _, t := range tweets {
-					lookup[t.Id] = struct{}{}
-				}
-
-				// Load the Tweet archive
-				reader := NewCSVReader(h)
-
-				for {
-					// For each tweet, see if we have it
-					subset, err := ReadN(reader, 100, lookup)
-					if err != nil {
-						return err
-					}
-
-					if len(subset) == 0 {
-						break
-					}
-
-					ids := []string{}
-					for _, t := range subset {
-						ids = append(ids, strconv.Itoa(int(t.TweetID)))
-					}
-
-					params := url.Values{}
-					params.Set("include_entities", "true")
-					params.Set("id", strings.Join(ids, ","))
-					statuses, err := api.LookupStatuses(params)
-					if err != nil {
-						return err
-					}
-
-					fmt.Printf("Processed %d tweets…\n", len(statuses))
-
-					for _, s := range statuses {
-						tweets = append(tweets, s)
-					}
-				}
-
-				if err := marshal(&twitterpb.Archive{Timeline: tweets}, tweetPath); err != nil {
-					return err
-				}
+			if err := a.archiveTweet(ctx, tweet.RetweetedStatus); err != nil {
+				return err
 			}
 
-			for _, tweet := range tweets {
-				if err := a.archiveTweet(ctx, tweet); err != nil {
-					return err
-				}
-
-				if err := a.archiveTweet(ctx, tweet.RetweetedStatus); err != nil {
-					return err
-				}
-
-				if err := a.archiveTweet(ctx, tweet.QuotedStatus); err != nil {
-					return err
-				}
+			if err := a.archiveTweet(ctx, tweet.QuotedStatus); err != nil {
+				return err
 			}
-			return nil
-		})
-	}
+		}
+		return nil
+	})
 
 	if _, err := os.Stat(favoritePath); os.IsNotExist(err) {
 		g.Go(func() error {
@@ -326,12 +367,23 @@ func (a *Archiver) Sync(ctx context.Context) error {
 	return g.Wait()
 }
 
-func (a *Archiver) tweets(ctx context.Context, api *TwitterApi) ([]*twitterpb.Tweet, error) {
+func (a *Archiver) tweets(ctx context.Context, api *TwitterApi, arc *twitterpb.Archive) ([]*twitterpb.Tweet, error) {
 	params := url.Values{}
 	params.Set("screen_name", a.username)
 	params.Set("count", "1000")
-	tweets := []*twitterpb.Tweet{}
 
+	// If we have existing tweets
+	var sinceID int64
+	for _, tweet := range arc.Timeline {
+		if tweet.Id > sinceID {
+			sinceID = tweet.Id
+		}
+	}
+	if sinceID > 0 {
+		params.Set("since_id", strconv.Itoa(int(sinceID)))
+	}
+
+	tweets := arc.Timeline
 	for {
 		timeline, err := api.GetUserTimeline(params)
 		if err != nil {

@@ -10,4 +10,6 @@ option go_package = "facebookpb";
 message Archive {
   User me = 1;
   repeated Photo photos = 2;
+  repeated Album albums = 3;
+  repeated User friends = 4;
 }
