@@ -272,7 +272,16 @@ func (a *Archiver) archiveNode(ctx context.Context, id string) error {
 
 func (a *Archiver) CanFollow(id, kind, connection string) bool {
 	if id == "me" {
-		return connection == "photos" || connection == "albums"
+		switch connection {
+		case "photos":
+			return true
+		case "albums":
+			return true
+		case "events":
+			return true
+		default:
+			return false
+		}
 	}
 	switch kind {
 	case "album":
