@@ -25,12 +25,14 @@ It has these top-level messages:
 	MediaSizes
 	Variant
 	VideoInfo
+	AdditionalMediaInfo
 	EntityMedia
 	Entities
 	List
 	Place
 	Coordinates
 	ExtendedTweet
+	Geo
 	Tweet
 	User
 */

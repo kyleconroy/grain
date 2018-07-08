@@ -5,28 +5,28 @@ package grain.twitter;
 option go_package = "twitterpb";
 
 message Url {
-  repeated int64 indices = 1;
+  repeated float indices = 1;
   string url = 2;
   string display_url = 3;
   string expanded_url = 4;
 }
 
 message Hashtag {
-  repeated int64 indices = 1;
+  repeated float indices = 1;
   string text = 2;
 }
 
 message UserMention {
-  reserved "id_str";
-  repeated int64 indices = 1;
+  repeated float indices = 1;
   string name = 2;
   string screen_name = 3;
-  int64 id = 4;
+  int64 id_str = 4;
+  float id = 5;
 }
 
 message MediaSize {
-  int32 w = 1;
-  int32 h = 2;
+  float w = 1;
+  float h = 2;
   string resize = 3;
 }
 
@@ -38,31 +38,39 @@ message MediaSizes {
 }
 
 message Variant {
-  int32 bitrate = 1;
+  float bitrate = 1;
   string content_type = 2;
   string url = 3;
 }
 
 message VideoInfo {
-  repeated int32 aspect_ratio = 1;
-  int64 duration_millis = 2;
+  repeated float aspect_ratio = 1;
+  float duration_millis = 2;
   repeated Variant variants = 3;
 }
 
+message AdditionalMediaInfo {
+  bool monetizable = 1;
+}
+
 message EntityMedia {
-  reserved "id_str", "source_status_id_str";
-  int64 id = 1;
+  int64 id_str = 1;
   string media_url = 2;
   string media_url_https = 3;
   string url = 4;
   string display_url = 5;
   string expanded_url = 6;
   MediaSizes sizes = 7;
-  int64 source_status_id = 8;
+  int64 source_status_id_str = 8;
   string type = 9;
-  repeated int64 indices = 10;
+  repeated float indices = 10;
   VideoInfo video_info = 11;
   string ext_alt_text = 12;
+  int64 source_user_id_str = 13;
+  float id = 14;
+  float source_status_id = 15;
+  float source_user_id = 16;
+  AdditionalMediaInfo additional_media_info = 17;
 }
 
 message Entities {
@@ -71,4 +79,5 @@ message Entities {
   Url url = 3;
   repeated UserMention user_mentions = 4;
   repeated EntityMedia media = 5;
+  repeated string symbols = 6; 
 }

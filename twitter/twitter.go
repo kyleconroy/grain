@@ -179,7 +179,7 @@ func (a *Archiver) Sync(ctx context.Context) error {
 			// Build out a lookup table of existing tweets
 			lookup := map[int64]struct{}{}
 			for _, t := range tweets {
-				lookup[t.Id] = struct{}{}
+				lookup[t.IdStr] = struct{}{}
 			}
 
 			// Load the Tweet archive
@@ -375,8 +375,8 @@ func (a *Archiver) tweets(ctx context.Context, api *TwitterApi, arc *twitterpb.A
 	// If we have existing tweets
 	var sinceID int64
 	for _, tweet := range arc.Timeline {
-		if tweet.Id > sinceID {
-			sinceID = tweet.Id
+		if tweet.IdStr > sinceID {
+			sinceID = tweet.IdStr
 		}
 	}
 	if sinceID > 0 {
@@ -401,7 +401,7 @@ func (a *Archiver) tweets(ctx context.Context, api *TwitterApi, arc *twitterpb.A
 			return tweets, nil
 		}
 
-		params.Set("max_id", strconv.Itoa(int(timeline[len(timeline)-1].Id-1)))
+		params.Set("max_id", strconv.Itoa(int(timeline[len(timeline)-1].IdStr-1)))
 	}
 	return tweets, nil
 }
@@ -429,7 +429,7 @@ func (a *Archiver) favorites(ctx context.Context, api *TwitterApi) ([]*twitterpb
 			return favorites, nil
 		}
 
-		params.Set("max_id", strconv.Itoa(int(timeline[len(timeline)-1].Id-1)))
+		params.Set("max_id", strconv.Itoa(int(timeline[len(timeline)-1].IdStr-1)))
 	}
 	return favorites, nil
 }
