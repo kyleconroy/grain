@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package grain.twitter;
+
+option go_package = "twitterpb";
+
+message InferredAgeInfo {
+  repeated string age = 1;
+  string birthDate = 2;
+}
+
+message AgeMeta {
+  InferredAgeInfo inferredAgeInfo = 1;
+}
+
+message AgeinfoEntry {
+  AgeMeta ageMeta = 1;
+}

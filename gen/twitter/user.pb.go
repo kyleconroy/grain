@@ -63,7 +63,7 @@ type User struct {
 func (m *User) Reset()                    { *m = User{} }
 func (m *User) String() string            { return proto.CompactTextString(m) }
 func (*User) ProtoMessage()               {}
-func (*User) Descriptor() ([]byte, []int) { return fileDescriptor8, []int{0} }
+func (*User) Descriptor() ([]byte, []int) { return fileDescriptor9, []int{0} }
 
 func (m *User) GetContributorsEnabled() bool {
 	if m != nil {
@@ -377,9 +377,9 @@ func init() {
 	proto.RegisterType((*User)(nil), "grain.twitter.User")
 }
 
-func init() { proto.RegisterFile("twitter/user.proto", fileDescriptor8) }
+func init() { proto.RegisterFile("twitter/user.proto", fileDescriptor9) }
 
-var fileDescriptor8 = []byte{
+var fileDescriptor9 = []byte{
 	// 910 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x55, 0x5d, 0x53, 0x1b, 0x37,
 	0x14, 0x1d, 0x03, 0xa1, 0x58, 0xc6, 0x06, 0x84, 0x01, 0x85, 0x90, 0xc4, 0x21, 0x4d, 0xe3, 0xa4,

@@ -27,6 +27,7 @@ func LoadOfficialArchive(base string) (*twitterpb.Archive, error) {
 		{"account.js", "account", "accounts"},
 		{"ad-engagements.js", "ad_engagements", ""},
 		{"ad-impressions.js", "ad_impressions", ""},
+		{"ageinfo.js", "ageinfo", "ageinfos"},
 	}
 
 	for _, e := range paths {

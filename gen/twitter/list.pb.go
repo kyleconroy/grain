@@ -31,7 +31,7 @@ type List struct {
 func (m *List) Reset()                    { *m = List{} }
 func (m *List) String() string            { return proto.CompactTextString(m) }
 func (*List) ProtoMessage()               {}
-func (*List) Descriptor() ([]byte, []int) { return fileDescriptor6, []int{0} }
+func (*List) Descriptor() ([]byte, []int) { return fileDescriptor7, []int{0} }
 
 func (m *List) GetSlug() string {
 	if m != nil {
@@ -128,9 +128,9 @@ func init() {
 	proto.RegisterType((*List)(nil), "grain.twitter.List")
 }
 
-func init() { proto.RegisterFile("twitter/list.proto", fileDescriptor6) }
+func init() { proto.RegisterFile("twitter/list.proto", fileDescriptor7) }
 
-var fileDescriptor6 = []byte{
+var fileDescriptor7 = []byte{
 	// 299 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x91, 0xbd, 0x4e, 0xc3, 0x30,
 	0x14, 0x85, 0x95, 0x26, 0xb4, 0xf5, 0x4d, 0x0b, 0xd5, 0x65, 0xb1, 0xf8, 0x91, 0x0c, 0x0b, 0x61,

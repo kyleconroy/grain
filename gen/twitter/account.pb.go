@@ -8,6 +8,7 @@ It is generated from these files:
 	twitter/account.proto
 	twitter/account_creation_ip.proto
 	twitter/ad.proto
+	twitter/ageinfo.proto
 	twitter/archive.proto
 	twitter/dm.proto
 	twitter/entity.proto
@@ -32,6 +33,9 @@ It has these top-level messages:
 	AdsUserData
 	Ad
 	AdEntry
+	InferredAgeInfo
+	AgeMeta
+	AgeinfoEntry
 	Archive
 	Target
 	DirectMessageData

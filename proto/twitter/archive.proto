@@ -3,6 +3,7 @@ syntax = "proto3";
 import "twitter/account.proto";
 import "twitter/account_creation_ip.proto";
 import "twitter/ad.proto";
+import "twitter/ageinfo.proto";
 import "twitter/dm.proto";
 import "twitter/list.proto";
 import "twitter/tweet.proto";
@@ -24,4 +25,5 @@ message Archive {
   repeated AccountEntry accounts = 8;
   repeated AdEntry ad_engagements = 9;
   repeated AdEntry ad_impressions = 10;
+  repeated AgeinfoEntry ageinfos = 11;
 }
