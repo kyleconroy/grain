@@ -22,7 +22,7 @@ type Url struct {
 func (m *Url) Reset()                    { *m = Url{} }
 func (m *Url) String() string            { return proto.CompactTextString(m) }
 func (*Url) ProtoMessage()               {}
-func (*Url) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{0} }
+func (*Url) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{0} }
 
 func (m *Url) GetIndices() []float32 {
 	if m != nil {
@@ -60,7 +60,7 @@ type Hashtag struct {
 func (m *Hashtag) Reset()                    { *m = Hashtag{} }
 func (m *Hashtag) String() string            { return proto.CompactTextString(m) }
 func (*Hashtag) ProtoMessage()               {}
-func (*Hashtag) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{1} }
+func (*Hashtag) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{1} }
 
 func (m *Hashtag) GetIndices() []float32 {
 	if m != nil {
@@ -87,7 +87,7 @@ type UserMention struct {
 func (m *UserMention) Reset()                    { *m = UserMention{} }
 func (m *UserMention) String() string            { return proto.CompactTextString(m) }
 func (*UserMention) ProtoMessage()               {}
-func (*UserMention) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{2} }
+func (*UserMention) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{2} }
 
 func (m *UserMention) GetIndices() []float32 {
 	if m != nil {
@@ -133,7 +133,7 @@ type MediaSize struct {
 func (m *MediaSize) Reset()                    { *m = MediaSize{} }
 func (m *MediaSize) String() string            { return proto.CompactTextString(m) }
 func (*MediaSize) ProtoMessage()               {}
-func (*MediaSize) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{3} }
+func (*MediaSize) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{3} }
 
 func (m *MediaSize) GetW() float32 {
 	if m != nil {
@@ -166,7 +166,7 @@ type MediaSizes struct {
 func (m *MediaSizes) Reset()                    { *m = MediaSizes{} }
 func (m *MediaSizes) String() string            { return proto.CompactTextString(m) }
 func (*MediaSizes) ProtoMessage()               {}
-func (*MediaSizes) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{4} }
+func (*MediaSizes) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{4} }
 
 func (m *MediaSizes) GetMedium() *MediaSize {
 	if m != nil {
@@ -205,7 +205,7 @@ type Variant struct {
 func (m *Variant) Reset()                    { *m = Variant{} }
 func (m *Variant) String() string            { return proto.CompactTextString(m) }
 func (*Variant) ProtoMessage()               {}
-func (*Variant) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{5} }
+func (*Variant) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{5} }
 
 func (m *Variant) GetBitrate() float32 {
 	if m != nil {
@@ -237,7 +237,7 @@ type VideoInfo struct {
 func (m *VideoInfo) Reset()                    { *m = VideoInfo{} }
 func (m *VideoInfo) String() string            { return proto.CompactTextString(m) }
 func (*VideoInfo) ProtoMessage()               {}
-func (*VideoInfo) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{6} }
+func (*VideoInfo) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{6} }
 
 func (m *VideoInfo) GetAspectRatio() []float32 {
 	if m != nil {
@@ -267,7 +267,7 @@ type AdditionalMediaInfo struct {
 func (m *AdditionalMediaInfo) Reset()                    { *m = AdditionalMediaInfo{} }
 func (m *AdditionalMediaInfo) String() string            { return proto.CompactTextString(m) }
 func (*AdditionalMediaInfo) ProtoMessage()               {}
-func (*AdditionalMediaInfo) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{7} }
+func (*AdditionalMediaInfo) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{7} }
 
 func (m *AdditionalMediaInfo) GetMonetizable() bool {
 	if m != nil {
@@ -299,7 +299,7 @@ type EntityMedia struct {
 func (m *EntityMedia) Reset()                    { *m = EntityMedia{} }
 func (m *EntityMedia) String() string            { return proto.CompactTextString(m) }
 func (*EntityMedia) ProtoMessage()               {}
-func (*EntityMedia) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{8} }
+func (*EntityMedia) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{8} }
 
 func (m *EntityMedia) GetIdStr() int64 {
 	if m != nil {
@@ -432,7 +432,7 @@ type Entities struct {
 func (m *Entities) Reset()                    { *m = Entities{} }
 func (m *Entities) String() string            { return proto.CompactTextString(m) }
 func (*Entities) ProtoMessage()               {}
-func (*Entities) Descriptor() ([]byte, []int) { return fileDescriptor2, []int{9} }
+func (*Entities) Descriptor() ([]byte, []int) { return fileDescriptor5, []int{9} }
 
 func (m *Entities) GetUrls() []*Url {
 	if m != nil {
@@ -489,9 +489,9 @@ func init() {
 	proto.RegisterType((*Entities)(nil), "grain.twitter.Entities")
 }
 
-func init() { proto.RegisterFile("twitter/entity.proto", fileDescriptor2) }
+func init() { proto.RegisterFile("twitter/entity.proto", fileDescriptor5) }
 
-var fileDescriptor2 = []byte{
+var fileDescriptor5 = []byte{
 	// 823 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x84, 0x55, 0x4b, 0x6f, 0xe3, 0x36,
 	0x10, 0x86, 0x2c, 0xcb, 0xb1, 0x46, 0xce, 0x63, 0xb9, 0x0f, 0xa8, 0xed, 0xa1, 0xae, 0xb0, 0xd8,

@@ -1,5 +1,8 @@
 syntax = "proto3";
 
+import "twitter/account.proto";
+import "twitter/account_creation_ip.proto";
+import "twitter/ad.proto";
 import "twitter/dm.proto";
 import "twitter/list.proto";
 import "twitter/tweet.proto";
@@ -16,4 +19,9 @@ message Archive {
   repeated Tweet timeline = 4;
   repeated Tweet favorites = 5;
   repeated DirectMessageEvent direct_messages = 6;
+  // Start of the official archive
+  repeated AccountCreationIpsEntry account_creation_ips = 7;
+  repeated AccountEntry accounts = 8;
+  repeated AdEntry ad_engagements = 9;
+  repeated AdEntry ad_impressions = 10;
 }

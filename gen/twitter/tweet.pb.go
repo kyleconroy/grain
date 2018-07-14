@@ -18,7 +18,7 @@ type Place struct {
 func (m *Place) Reset()                    { *m = Place{} }
 func (m *Place) String() string            { return proto.CompactTextString(m) }
 func (*Place) ProtoMessage()               {}
-func (*Place) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
+func (*Place) Descriptor() ([]byte, []int) { return fileDescriptor7, []int{0} }
 
 type Coordinates struct {
 }
@@ -26,7 +26,7 @@ type Coordinates struct {
 func (m *Coordinates) Reset()                    { *m = Coordinates{} }
 func (m *Coordinates) String() string            { return proto.CompactTextString(m) }
 func (*Coordinates) ProtoMessage()               {}
-func (*Coordinates) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{1} }
+func (*Coordinates) Descriptor() ([]byte, []int) { return fileDescriptor7, []int{1} }
 
 type ExtendedTweet struct {
 }
@@ -34,7 +34,7 @@ type ExtendedTweet struct {
 func (m *ExtendedTweet) Reset()                    { *m = ExtendedTweet{} }
 func (m *ExtendedTweet) String() string            { return proto.CompactTextString(m) }
 func (*ExtendedTweet) ProtoMessage()               {}
-func (*ExtendedTweet) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{2} }
+func (*ExtendedTweet) Descriptor() ([]byte, []int) { return fileDescriptor7, []int{2} }
 
 type Geo struct {
 }
@@ -42,7 +42,7 @@ type Geo struct {
 func (m *Geo) Reset()                    { *m = Geo{} }
 func (m *Geo) String() string            { return proto.CompactTextString(m) }
 func (*Geo) ProtoMessage()               {}
-func (*Geo) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{3} }
+func (*Geo) Descriptor() ([]byte, []int) { return fileDescriptor7, []int{3} }
 
 type Tweet struct {
 	Contributors                []int64        `protobuf:"varint,1,rep,packed,name=contributors" json:"contributors,omitempty"`
@@ -89,7 +89,7 @@ type Tweet struct {
 func (m *Tweet) Reset()                    { *m = Tweet{} }
 func (m *Tweet) String() string            { return proto.CompactTextString(m) }
 func (*Tweet) ProtoMessage()               {}
-func (*Tweet) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{4} }
+func (*Tweet) Descriptor() ([]byte, []int) { return fileDescriptor7, []int{4} }
 
 func (m *Tweet) GetContributors() []int64 {
 	if m != nil {
@@ -365,9 +365,9 @@ func init() {
 	proto.RegisterType((*Tweet)(nil), "grain.twitter.Tweet")
 }
 
-func init() { proto.RegisterFile("twitter/tweet.proto", fileDescriptor4) }
+func init() { proto.RegisterFile("twitter/tweet.proto", fileDescriptor7) }
 
-var fileDescriptor4 = []byte{
+var fileDescriptor7 = []byte{
 	// 853 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x55, 0xdd, 0x6b, 0x1b, 0xc7,
 	0x17, 0x45, 0x92, 0xe5, 0x58, 0x57, 0x1f, 0x96, 0xae, 0x64, 0x7b, 0x62, 0xc7, 0xbf, 0xdf, 0x46,

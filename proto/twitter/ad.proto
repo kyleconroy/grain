@@ -1,0 +1,66 @@
+syntax = "proto3";
+
+package grain.twitter;
+
+option go_package = "twitterpb";
+
+message DeviceInfo {
+  string osType = 1;
+}
+
+message PromotedTweetInfo {
+  int64 tweetId = 1;
+  string tweetText = 2;
+  repeated string urls = 3;
+  repeated string mediaUrls = 4;
+}
+
+message AdvertiserInfo {
+  string advertiserName = 1;
+  string screenName = 2;
+}
+
+message MatchedTargetingCriteria {
+  string targetingType = 1;
+  string targetingValue = 2;
+}
+
+message Impressions {
+  DeviceInfo deviceInfo = 1;
+  string displayLocation = 2;
+  PromotedTweetInfo promotedTweetInfo = 3;
+  AdvertiserInfo advertiserInfo = 4;
+  repeated MatchedTargetingCriteria matchedTargetingCriteria = 5;
+  string impressionTime = 6;
+}
+
+message EngagementAttributes {
+  string engagementTime = 1;
+  string engagementType = 2;
+}
+
+message AdImpressions {
+  repeated Impressions impressions = 1;
+}
+
+message Engagements {
+  Impressions impressionAttributes = 1;
+  repeated EngagementAttributes engagementAttributes = 2;
+}
+
+message AdEngagements {
+  repeated Engagements engagements = 1;
+}
+
+message AdsUserData {
+  AdEngagements adEngagements = 1;
+  AdImpressions adImpressions = 2;
+}
+
+message Ad {
+  AdsUserData adsUserData = 1;
+}
+
+message AdEntry {
+  Ad ad = 1;
+}

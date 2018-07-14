@@ -19,7 +19,7 @@ type Target struct {
 func (m *Target) Reset()                    { *m = Target{} }
 func (m *Target) String() string            { return proto.CompactTextString(m) }
 func (*Target) ProtoMessage()               {}
-func (*Target) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{0} }
+func (*Target) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{0} }
 
 func (m *Target) GetRecipientId() string {
 	if m != nil {
@@ -36,7 +36,7 @@ type DirectMessageData struct {
 func (m *DirectMessageData) Reset()                    { *m = DirectMessageData{} }
 func (m *DirectMessageData) String() string            { return proto.CompactTextString(m) }
 func (*DirectMessageData) ProtoMessage()               {}
-func (*DirectMessageData) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{1} }
+func (*DirectMessageData) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{1} }
 
 func (m *DirectMessageData) GetText() string {
 	if m != nil {
@@ -62,7 +62,7 @@ type DirectMessageCreate struct {
 func (m *DirectMessageCreate) Reset()                    { *m = DirectMessageCreate{} }
 func (m *DirectMessageCreate) String() string            { return proto.CompactTextString(m) }
 func (*DirectMessageCreate) ProtoMessage()               {}
-func (*DirectMessageCreate) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{2} }
+func (*DirectMessageCreate) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{2} }
 
 func (m *DirectMessageCreate) GetTarget() *Target {
 	if m != nil {
@@ -102,7 +102,7 @@ type DirectMessageEvent struct {
 func (m *DirectMessageEvent) Reset()                    { *m = DirectMessageEvent{} }
 func (m *DirectMessageEvent) String() string            { return proto.CompactTextString(m) }
 func (*DirectMessageEvent) ProtoMessage()               {}
-func (*DirectMessageEvent) Descriptor() ([]byte, []int) { return fileDescriptor1, []int{3} }
+func (*DirectMessageEvent) Descriptor() ([]byte, []int) { return fileDescriptor4, []int{3} }
 
 func (m *DirectMessageEvent) GetType() string {
 	if m != nil {
@@ -139,9 +139,9 @@ func init() {
 	proto.RegisterType((*DirectMessageEvent)(nil), "grain.twitter.DirectMessageEvent")
 }
 
-func init() { proto.RegisterFile("twitter/dm.proto", fileDescriptor1) }
+func init() { proto.RegisterFile("twitter/dm.proto", fileDescriptor4) }
 
-var fileDescriptor1 = []byte{
+var fileDescriptor4 = []byte{
 	// 335 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x7c, 0x92, 0xcf, 0x6a, 0xc2, 0x40,
 	0x10, 0x87, 0x49, 0x2a, 0xa2, 0x13, 0x15, 0xdd, 0xb6, 0x54, 0xda, 0x8b, 0xcd, 0x49, 0x90, 0xa6,

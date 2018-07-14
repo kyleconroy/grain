@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package grain.twitter;
+
+option go_package = "twitterpb";
+
+message Account {
+  int64 updatedAt = 1;
+  string email = 2;
+  string createdVia = 3;
+  string username = 4;
+  int64 accountId = 5;
+  int64 createdAt = 6;
+  string accountDisplayName = 7;
+  string timeZone = 8;
+}
+
+message AccountEntry {
+  Account account = 1;
+}

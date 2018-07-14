@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+package grain.twitter;
+
+option go_package = "twitterpb";
+
+message AccountCreationIp {
+  string accountId = 1;
+  string userCreationIp = 2;
+}
+
+message AccountCreationIpsEntry {
+  AccountCreationIp accountCreationIp = 1;
+}

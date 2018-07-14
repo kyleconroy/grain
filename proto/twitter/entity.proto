@@ -79,5 +79,5 @@ message Entities {
   Url url = 3;
   repeated UserMention user_mentions = 4;
   repeated EntityMedia media = 5;
-  repeated string symbols = 6; 
+  repeated string symbols = 6;
 }

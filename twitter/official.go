@@ -12,16 +12,25 @@ import (
 )
 
 // TODO: Load from a zip file
+type archiveEntry struct {
+	filename    string
+	windowName  string
+	archiveName string
+}
 
 func LoadOfficialArchive(base string) (*twitterpb.Archive, error) {
 	m := jsonpb.Unmarshaler{}
 	a := twitterpb.Archive{}
-	paths := []string{
-		"tweet.js",
+
+	paths := []archiveEntry{
+		{"account-creation-ip.js", "account_creation_ip", "account_creation_ips"},
+		{"account.js", "account", "accounts"},
+		{"ad-engagements.js", "ad_engagements", ""},
+		{"ad-impressions.js", "ad_impressions", ""},
 	}
 
-	for _, filename := range paths {
-		path := filepath.Join(base, filename)
+	for _, e := range paths {
+		path := filepath.Join(base, e.filename)
 		if _, err := os.Stat(path); os.IsNotExist(err) {
 			continue
 		}
@@ -30,10 +39,15 @@ func LoadOfficialArchive(base string) (*twitterpb.Archive, error) {
 			return nil, err
 		}
 
+		name := e.archiveName
+		if name == "" {
+			name = e.windowName
+		}
+
 		// TODO: Make this a regular expression
 		output := bytes.Replace(input,
-			[]byte("window.YTD.tweet.part0 = "),
-			[]byte("{\"timeline\": "),
+			[]byte("window.YTD."+e.windowName+".part0 = "),
+			[]byte("{\""+name+"\": "),
 			-1)
 		output = append(output, "}"...)
 
